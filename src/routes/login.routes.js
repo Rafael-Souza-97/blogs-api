@@ -1,9 +1,9 @@
 const express = require('express');
-const productsController = require('../controllers/product.controller');
-const { productNameValidation } = require('../middlewares/validateProducts.middleware');
+const { loginController } = require('../controllers/login.controller');
+const { loginValidation } = require('../middlewares/loginValidation.middleware');
 
-const productsRouter = express.Router();
+const loginRouter = express.Router();
 
-productsRouter.get('/', productsController.getProducts);
+loginRouter.post('/', loginValidation, loginController);
 
-module.exports = productsRouter;
+module.exports = loginRouter;
