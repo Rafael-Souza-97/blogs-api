@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    display_name: {
+    displayName: {
       type: DataTypes.STRING,
     },
     email: {
@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     tableName: 'users',
     timestamps: false,
+    underscored: true
   });
 
   User.associate = (models) => {

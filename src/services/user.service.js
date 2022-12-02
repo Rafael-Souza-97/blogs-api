@@ -1,13 +1,28 @@
-const models = require('../models');
+const { User } = require('../models');
 
-const validateUser = async (displayName, email, password, image) => {
-  const result = await models.User.findOne({ where: { email } });
+const getAllUsers = async () => {
+  const usersResult = await User.findAll();
+
+  const getUsers = usersResult.map(({ dataValues }) => {
+    const { password: _password, ...usersWithoutPassword } = dataValues;
+
+    return usersWithoutPassword;
+  });
+
+  return getUsers;
+};
+
+const addNewUser = async (displayName, email, password, image) => {
+  const result = await User.findOne({ where: { email } });
 
   if (result) return false;
   
-  await models.User.create({ displayName, email, password, image });
+  await User.create({ displayName, email, password, image });
 
   return true;
 };
 
-module.exports = { validateUser };
+module.exports = {
+  getAllUsers,
+  addNewUser,
+};
