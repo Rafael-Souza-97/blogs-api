@@ -1,7 +1,11 @@
 const userService = require('../services/user.service');
 const { generateToken } = require('../auth/generateToken');
 const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = require('../utils/requisitionStatus');
-const { HTTP_CONFLICT, HTTP_SERVIDOR_ERROR } = require('../utils/requisitionsErrors');
+const {
+  HTTP_CONFLICT,
+  HTTP_SERVIDOR_ERROR,
+  HTTP_NOT_FOUND,
+} = require('../utils/requisitionsErrors');
 
 const getAllUsers = async (_req, res) => {
   const usersResult = await userService.getAllUsers();
@@ -19,7 +23,7 @@ const getUserById = async (req, res) => {
   const userResult = await userService.getUserById(id);
 
   if (!userResult) {
-    return res.status(404).json({ message: 'User does not exist' });
+    return res.status(HTTP_NOT_FOUND).json({ message: 'User does not exist' });
   }
 
   return res.status(HTTP_STATUS_OK).json(userResult);
