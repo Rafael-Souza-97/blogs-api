@@ -1,5 +1,11 @@
 const { Category } = require('../models');
 
+const getAllCategories = async () => {
+  const categoriesResult = await Category.findAll();
+
+  return categoriesResult;
+};
+
 const addNewCategory = async (name) => {
   const result = await Category.findOne({ where: { name } });
 
@@ -11,5 +17,6 @@ const addNewCategory = async (name) => {
 };
 
 module.exports = {
+  getAllCategories,
   addNewCategory,
 };
