@@ -12,6 +12,16 @@ const getAllUsers = async () => {
   return getUsers;
 };
 
+const getUserById = async (id) => {
+  const userResult = await User.findByPk(id);
+
+  if (!userResult) return false;
+
+  const { password: _password, ...userWithoutPassword } = userResult.dataValues;
+
+  return userWithoutPassword;
+};
+
 const addNewUser = async (displayName, email, password, image) => {
   const result = await User.findOne({ where: { email } });
 
@@ -24,5 +34,6 @@ const addNewUser = async (displayName, email, password, image) => {
 
 module.exports = {
   getAllUsers,
+  getUserById,
   addNewUser,
 };

@@ -13,6 +13,18 @@ const getAllUsers = async (_req, res) => {
   return res.status(HTTP_STATUS_OK).json(usersResult);
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const userResult = await userService.getUserById(id);
+
+  if (!userResult) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+
+  return res.status(HTTP_STATUS_OK).json(userResult);
+};
+
 const addNewUser = async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
@@ -28,6 +40,7 @@ const addNewUser = async (req, res) => {
 };
 
 module.exports = {
-  addNewUser,
   getAllUsers,
+  getUserById,
+  addNewUser,
 };
