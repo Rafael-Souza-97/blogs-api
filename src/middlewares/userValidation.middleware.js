@@ -29,7 +29,7 @@ const userValidation = (req, res, next) => {
   const validatePassword = passwordValidation(password);
 
   if (!validDisplayName) {
-    return res.status(400)
+    return res.status(HTTP_BAD_REQUEST)
       .json({ message: '"displayName" length must be at least 8 characters long' });
   }
 
