@@ -12,7 +12,7 @@ const loginController = async (req, res) => {
     return res.status(HTTP_BAD_REQUEST).json({ message: 'Invalid fields' });
   }
 
-  const token = generateToken(email);
+  const token = generateToken(loginResult);
 
   return res.status(HTTP_STATUS_OK).json({ token });
 };

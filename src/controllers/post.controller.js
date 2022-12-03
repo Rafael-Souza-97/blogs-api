@@ -4,7 +4,7 @@ const { HTTP_STATUS_OK } = require('../utils/requisitionStatus');
 const {
   HTTP_SERVIDOR_ERROR,
   HTTP_NOT_FOUND,
-  HTTP_UNAUTHORIZED
+  HTTP_UNAUTHORIZED,
 } = require('../utils/requisitionsErrors');
 
 const getAllPosts = async (_req, res) => {
