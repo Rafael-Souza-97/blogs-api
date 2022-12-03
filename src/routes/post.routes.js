@@ -1,10 +1,12 @@
 const express = require('express');
-// const { addNewPost } = require('../controllers/post.controller');
+const { getAllPosts } = require('../controllers/post.controller');
 const { postValidation } = require('../middlewares/postValidation.middleware');
 const { tokenValidation } = require('../middlewares/tokenValidation.middleware');
 
-const PostRouter = express.Router();
+const postRouter = express.Router();
 
-PostRouter.post('/', tokenValidation, postValidation);
+postRouter.get('/', tokenValidation, getAllPosts);
 
-module.exports = PostRouter;
+postRouter.post('/', tokenValidation, postValidation);
+
+module.exports = postRouter;
