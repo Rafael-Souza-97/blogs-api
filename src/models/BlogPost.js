@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    user_id: {
+    userId: {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
    }, {
       timestamps: false,
       tableName: 'blog_posts',
-      underscored: false,
+      underscored: true,
   });
 
   BlogPost.associate = (models) => {

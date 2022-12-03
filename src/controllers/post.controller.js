@@ -1,4 +1,5 @@
 const postService = require('../services/post.service');
+const { validateUserToken } = require('../auth/generateToken');
 const { HTTP_STATUS_OK } = require('../utils/requisitionStatus');
 const { HTTP_SERVIDOR_ERROR, HTTP_NOT_FOUND } = require('../utils/requisitionsErrors');
 
@@ -24,7 +25,28 @@ const getPostById = async (req, res) => {
   return res.status(HTTP_STATUS_OK).json(postResult);
 };
 
+const updatePost = async (req, res) => {
+  const { authorization } = req.headers;
+  const { id: postId } = req.params;
+  const { title, content } = req.body;
+
+  const { user_id: userId } = await postService.getPostById(postId);
+
+  const userToken = validateUserToken(authorization, userId);
+  
+  if (userToken === 'Unauthorized user') {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+
+  await postService.updatePost(postId, title, content);
+
+  const updatedPost = await postService.getPostById(postId);
+
+  return res.status(200).json(updatedPost);
+};
+
 module.exports = {
   getAllPosts,
   getPostById,
+  updatePost,
 };

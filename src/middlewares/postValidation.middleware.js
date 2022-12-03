@@ -12,4 +12,22 @@ const postValidation = (req, res, next) => {
   return next();
 };
 
-module.exports = { postValidation };
+const putValidation = (req, res, next) => {
+  const {
+    title,
+    content,
+  } = req.body;
+
+  if (!title || !content) { 
+    return res.status(HTTP_BAD_REQUEST).json({ 
+      message: 'Some required fields are missing',
+    });
+  }
+
+  return next();
+};
+
+module.exports = {
+  postValidation,
+  putValidation,
+};
