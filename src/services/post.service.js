@@ -13,6 +13,20 @@ const getAllPosts = async () => {
   return postMap;
 };  
 
+const getPostById = async (id) => {
+  const postResult = await BlogPost.findOne({ include: [{
+    model: User, as: 'user', attributes: { exclude: ['password'] }, where: { id },
+  }, {
+    model: Category, as: 'categories', through: { attributes: [] },
+    }],
+  });
+
+  if (!postResult) return false;
+
+  return postResult;
+};
+
 module.exports = {
   getAllPosts,
+  getPostById,
 };
