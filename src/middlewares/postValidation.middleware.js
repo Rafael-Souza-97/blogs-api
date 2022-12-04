@@ -13,10 +13,7 @@ const postValidation = (req, res, next) => {
 };
 
 const putValidation = (req, res, next) => {
-  const {
-    title,
-    content,
-  } = req.body;
+  const { title, content } = req.body;
 
   if (!title || !content) { 
     return res.status(HTTP_BAD_REQUEST).json({ 

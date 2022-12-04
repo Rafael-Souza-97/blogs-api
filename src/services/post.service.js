@@ -1,4 +1,4 @@
-const { User, BlogPost, Category } = require('../models');
+const { User, BlogPost, Category, PostCategory } = require('../models');
 
 const getAllPosts = async () => {
   const postsResult = await BlogPost.findAll({ include: [{
@@ -14,8 +14,10 @@ const getAllPosts = async () => {
 };  
 
 const getPostById = async (id) => {
-  const postResult = await BlogPost.findOne({ include: [{
-    model: User, as: 'user', attributes: { exclude: ['password'] }, where: { id },
+  const postResult = await BlogPost.findOne({ 
+    where: { id }, 
+    include: [{
+    model: User, as: 'user', attributes: { exclude: ['password'] },
   }, {
     model: Category, as: 'categories', through: { attributes: [] },
     }],
@@ -26,6 +28,27 @@ const getPostById = async (id) => {
   return postResult;
 };
 
+const createPost = async ({ userId, title, content, categoryIds }) => {
+  const newPost = await BlogPost.create({
+    title,
+    content,
+    userId,
+    updated: Date.now(),
+    published: Date.now(),
+  });
+
+  const { id } = newPost.dataValues;
+
+  await Promise.all(categoryIds.map(async (idCategory) => {
+    await PostCategory.create({
+    postId: id,
+    categoryId: idCategory,
+    });
+  }));
+
+  return newPost;
+};
+
 const updatePost = async (id, title, content) => {
   const [updatedPost] = await BlogPost.update(
     { title, content },
@@ -33,10 +56,21 @@ const updatePost = async (id, title, content) => {
   );
   
   return updatedPost;
-};  
+};
+
+const deletePost = async (id) => {
+  console.log('ENTROU NO SERVICE ');
+  const deletedPost = await BlogPost.destroy(
+    { where: { id } },
+  );
+
+  return deletedPost;
+};
 
 module.exports = {
   getAllPosts,
   getPostById,
+  createPost,
   updatePost,
+  deletePost,
 };

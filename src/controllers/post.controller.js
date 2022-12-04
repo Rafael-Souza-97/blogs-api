@@ -1,10 +1,12 @@
 const postService = require('../services/post.service');
-const { validateUserToken } = require('../auth/generateToken');
-const { HTTP_STATUS_OK } = require('../utils/requisitionStatus');
+const { verifyCategories } = require('../services/category.service');
+const { validateUserToken, getUserIdByToken } = require('../auth/validateUserToken');
+const { HTTP_STATUS_OK, HTTP_STATUS_NO_CONTENT } = require('../utils/requisitionStatus');
 const {
   HTTP_SERVIDOR_ERROR,
   HTTP_NOT_FOUND,
   HTTP_UNAUTHORIZED,
+  HTTP_BAD_REQUEST,
 } = require('../utils/requisitionsErrors');
 
 const getAllPosts = async (_req, res) => {
@@ -29,6 +31,29 @@ const getPostById = async (req, res) => {
   return res.status(HTTP_STATUS_OK).json(postResult);
 };
 
+const createPost = async (req, res) => {
+    const { authorization } = req.headers;
+    const { title, content, categoryIds } = req.body;
+
+    const invalidCategories = await verifyCategories(categoryIds);
+
+    if (invalidCategories !== 0) {
+      return res.status(HTTP_BAD_REQUEST)
+      .json({ message: 'one or more "categoryIds" not found' });
+    }
+
+    const userId = getUserIdByToken(authorization);
+
+    const post = await postService
+      .createPost({ userId, title, content, categoryIds });
+
+    const { dataValues } = post;
+
+    console.log('DATAVALUES ---> ', dataValues);
+  
+    return res.status(201).json(post);
+};
+
 const updatePost = async (req, res) => {
   const { authorization } = req.headers;
   const { id: postId } = req.params;
@@ -49,8 +74,36 @@ const updatePost = async (req, res) => {
   return res.status(HTTP_STATUS_OK).json(updatedPost);
 };
 
+const deletePost = async (req, res) => {
+  const { authorization } = req.headers;
+  const { id: postId } = req.params;
+
+  const post = await postService.getPostById(postId);
+
+  console.log('Ṕost ID ----> ', postId);
+  console.log('USER ID ----> ', post);
+
+  if (!post) {
+    console.log('ENTROU NO IF DO TYPE ');
+    return res.status(HTTP_NOT_FOUND).json({ message: 'Post does not exist' });
+  }
+  
+  const userToken = validateUserToken(authorization, post);
+
+  if (userToken === 'Unauthorized user') {
+    console.log('ENTROU NO IF DO UNAUTHORIZED ');
+    return res.status(HTTP_UNAUTHORIZED).json({ message: 'Unauthorized user' });
+  }
+
+  await postService.deletePost(postId);
+
+  return res.status(HTTP_STATUS_NO_CONTENT).end();
+};
+
 module.exports = {
   getAllPosts,
   getPostById,
+  createPost,
   updatePost,
+  deletePost,
 };
