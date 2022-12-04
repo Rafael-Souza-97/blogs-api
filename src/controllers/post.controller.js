@@ -1,7 +1,11 @@
 const postService = require('../services/post.service');
 const { verifyCategories } = require('../services/category.service');
 const { validateUserToken, getUserIdByToken } = require('../auth/validateUserToken');
-const { HTTP_STATUS_OK, HTTP_STATUS_NO_CONTENT } = require('../utils/requisitionStatus');
+const {
+  HTTP_STATUS_OK,
+  HTTP_STATUS_NO_CONTENT,
+  HTTP_STATUS_CREATED,
+} = require('../utils/requisitionStatus');
 const {
   HTTP_SERVIDOR_ERROR,
   HTTP_NOT_FOUND,
@@ -46,12 +50,8 @@ const createPost = async (req, res) => {
 
     const post = await postService
       .createPost({ userId, title, content, categoryIds });
-
-    const { dataValues } = post;
-
-    console.log('DATAVALUES ---> ', dataValues);
   
-    return res.status(201).json(post);
+    return res.status(HTTP_STATUS_CREATED).json(post);
 };
 
 const updatePost = async (req, res) => {
@@ -75,29 +75,26 @@ const updatePost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
-  const { authorization } = req.headers;
-  const { id: postId } = req.params;
-
-  const post = await postService.getPostById(postId);
-
-  console.log('Ṕost ID ----> ', postId);
-  console.log('USER ID ----> ', post);
-
-  if (!post) {
-    console.log('ENTROU NO IF DO TYPE ');
+  try {
+    const { authorization } = req.headers;
+    const { id: postId } = req.params;
+  
+    const post = await postService.getPostById(postId);
+  
+    const { userId } = post.dataValues;
+  
+    const userToken = validateUserToken(authorization, userId);
+  
+    if (userToken === 'Unauthorized user') {
+      return res.status(HTTP_UNAUTHORIZED).json({ message: 'Unauthorized user' });
+    }
+  
+    await postService.deletePost(postId);
+  
+    return res.status(HTTP_STATUS_NO_CONTENT).end();
+  } catch (error) {
     return res.status(HTTP_NOT_FOUND).json({ message: 'Post does not exist' });
   }
-  
-  const userToken = validateUserToken(authorization, post);
-
-  if (userToken === 'Unauthorized user') {
-    console.log('ENTROU NO IF DO UNAUTHORIZED ');
-    return res.status(HTTP_UNAUTHORIZED).json({ message: 'Unauthorized user' });
-  }
-
-  await postService.deletePost(postId);
-
-  return res.status(HTTP_STATUS_NO_CONTENT).end();
 };
 
 module.exports = {
