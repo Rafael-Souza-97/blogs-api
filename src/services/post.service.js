@@ -59,12 +59,11 @@ const updatePost = async (id, title, content) => {
 };
 
 const deletePost = async (id) => {
-  console.log('ENTROU NO SERVICE ');
-  const deletedPost = await BlogPost.destroy(
+  const deletedUserId = await BlogPost.destroy(
     { where: { id } },
   );
 
-  return deletedPost;
+  return deletedUserId;
 };
 
 module.exports = {

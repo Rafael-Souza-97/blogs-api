@@ -1,6 +1,9 @@
 const postService = require('../services/post.service');
 const { verifyCategories } = require('../services/category.service');
-const { validateUserToken, getUserIdByToken } = require('../auth/validateUserToken');
+const {
+  validateUserToken,
+  getUserIdByToken,
+} = require('../auth/validateUserToken');
 const {
   HTTP_STATUS_OK,
   HTTP_STATUS_NO_CONTENT,
@@ -93,6 +96,8 @@ const deletePost = async (req, res) => {
   
     return res.status(HTTP_STATUS_NO_CONTENT).end();
   } catch (error) {
+    console.log(error);
+
     return res.status(HTTP_NOT_FOUND).json({ message: 'Post does not exist' });
   }
 };
