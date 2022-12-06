@@ -152,3 +152,8 @@ cd blogs-api
 ## Infos Adicionais
 
 - ###### Percentual de cumprimento de requisitos ([Trybe](https://www.betrybe.com/))- 100%
+
+## Preview
+
+
+https://user-images.githubusercontent.com/99055008/205993165-043ad815-3527-490e-984c-fbafd825d19e.mp4
