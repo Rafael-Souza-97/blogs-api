@@ -2,6 +2,7 @@ const express = require('express');
 const {
   getAllPosts,
   getPostById,
+  searchPosts,
   createPost,
   updatePost,
   deletePost,
@@ -15,6 +16,8 @@ const { tokenValidation } = require('../middlewares/tokenValidation.middleware')
 const postRouter = express.Router();
 
 postRouter.get('/', tokenValidation, getAllPosts);
+
+postRouter.get('/search', tokenValidation, searchPosts);
 
 postRouter.get('/:id', tokenValidation, getPostById);
 

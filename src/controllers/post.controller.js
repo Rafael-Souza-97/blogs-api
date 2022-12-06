@@ -38,6 +38,15 @@ const getPostById = async (req, res) => {
   return res.status(HTTP_STATUS_OK).json(postResult);
 };
 
+const searchPosts = async (req, res) => {
+  const { q } = req.query;
+  const post = await postService.searchPosts(q);
+
+  if (!post) return res.status(HTTP_NOT_FOUND).json({ message: 'Post does not exist' });
+
+  return res.status(HTTP_STATUS_OK).json(post);
+};
+
 const createPost = async (req, res) => {
     const { authorization } = req.headers;
     const { title, content, categoryIds } = req.body;
@@ -105,6 +114,7 @@ const deletePost = async (req, res) => {
 module.exports = {
   getAllPosts,
   getPostById,
+  searchPosts,
   createPost,
   updatePost,
   deletePost,
