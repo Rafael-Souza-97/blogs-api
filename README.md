@@ -8,9 +8,7 @@ O projeto consiste em desenvolver o back-end de blog onde é possível procurar,
 - `Service`: Esta camada é responsável por validar as regras de negócio da aplicação.
 - `Controller`: Essa camada é responsável por validar os valores recebidos de uma aplicação cliente.
 
-<br>
-
-## Utilização
+### Utilização
 
 A aplicação possui as seguintes rotas para realizar as operações de CRUD de posts:
 
