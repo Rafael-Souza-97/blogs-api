@@ -2,6 +2,7 @@
 
 Aplicação realizada enquanto aluno da [Trybe](https://www.betrybe.com/) para reforçar os conhecimentos sobre [Node.js](https://nodejs.org/en/)
 conectado à um banco de dados [MySQL](https://www.mysql.com/) com [Sequelize](https://sequelize.org/) através de uma [API RESTful](https://blog.betrybe.com/desenvolvimento-web/api-rest-tudo-sobre/).
+
 O projeto consiste em desenvolver o back-end de blog onde é possível procurar, criar, visualizar e deletar usuários e posts no blog. A aplicação utiliza uma API RESTful com arquitetura MSC (Model-Service-Controller), que é um modelo de arquitetura de software baseado em camadas:
 
 - `Model`: Esta camada é responsável por abrigar todo o código que pode acessar os dados no banco de dados ou no sistema de arquivos. Ela está sendo utilizada com o pacote [Sequelize](https://sequelize.org/).
